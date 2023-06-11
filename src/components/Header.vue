@@ -7,13 +7,13 @@ const props = defineProps({
     },
     guitarra: {
         type: Object,
-        required: true        
+        required: true
     }
 })
 defineEmits(['decrementar-cantidad', 'incrementar-cantidad', 'agregar-carrito', 'eliminar-producto', 'vaciar-carrito'])
 
 const totalPagar = computed(() => {
-    return props.carrito.reduce(( total, producto) => total + (producto.cantidad * producto.precio), 0)
+    return props.carrito.reduce((total, producto) => total + (producto.cantidad * producto.precio), 0)
 })
 </script>
 
@@ -32,7 +32,7 @@ const totalPagar = computed(() => {
 
                         <div id="carrito" class="bg-white p-3">
                             <p v-if="carrito.length === 0" class="text-center">El carrito esta vacio</p>
-                            <div v-else >
+                            <div v-else>
                                 <table class="w-100 table">
                                     <thead>
                                         <tr>
@@ -44,25 +44,29 @@ const totalPagar = computed(() => {
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        <tr v-for="producto in carrito" :key="producto">
+                                        <tr v-for="producto in carrito" :key="producto.id">
                                             <td>
-                                                <img class="img-fluid" :src="'/img/' + producto.imagen + '.jpg'" :alt="'imagen guitarra ' + producto.nombre ">
+                                                <img class="img-fluid" :src="'/img/' + producto.imagen + '.jpg'"
+                                                    :alt="'imagen guitarra ' + producto.nombre">
                                             </td>
-                                            <td>{{producto.nombre}}</td>
+                                            <td>{{ producto.nombre }}</td>
                                             <td class="fw-bold">
                                                 {{ producto.precio }}
                                             </td>
                                             <td class="flex align-items-start gap-4">
-                                                <button type="button" class="btn btn-dark" @click="$emit('decrementar-cantidad', producto.id)">
+                                                <button type="button" class="btn btn-dark"
+                                                    @click="$emit('decrementar-cantidad', producto.id)">
                                                     -
                                                 </button>
                                                 {{ producto.cantidad }}
-                                                <button type="button" class="btn btn-dark"  @click="$emit('incrementar-cantidad', producto.id)">
+                                                <button type="button" class="btn btn-dark"
+                                                    @click="$emit('incrementar-cantidad', producto.id)">
                                                     +
                                                 </button>
                                             </td>
                                             <td>
-                                                <button class="btn btn-danger" type="button" @click="$emit('eliminar-producto', producto.id)">
+                                                <button class="btn btn-danger" type="button"
+                                                    @click="$emit('eliminar-producto', producto.id)">
                                                     X
                                                 </button>
                                             </td>
@@ -70,9 +74,10 @@ const totalPagar = computed(() => {
                                     </tbody>
                                 </table>
 
-                                <p class="text-end">Total pagar: <span class="fw-bold">{{  totalPagar  }}</span></p>
+                                <p class="text-end">Total pagar: <span class="fw-bold">{{ totalPagar }}</span></p>
 
-                                <button class="btn btn-dark w-100 mt-3 p-2" @click="$emit('vaciar-carrito')">Vaciar Carrito</button>
+                                <button class="btn btn-dark w-100 mt-3 p-2" @click="$emit('vaciar-carrito')">Vaciar
+                                    Carrito</button>
                             </div>
                         </div>
                     </div>
@@ -81,14 +86,14 @@ const totalPagar = computed(() => {
 
             <div class="row mt-5">
                 <div class="col-md-6 text-center text-md-start pt-5">
-                    <h1 class="display-2 fw-bold">Modelo {{guitarra.nombre}}</h1>
-                    <p class="mt-5 fs-5 text-white">{{guitarra.descripcion}}</p>
+                    <h1 class="display-2 fw-bold">Modelo {{ guitarra.nombre }}</h1>
+                    <p class="mt-5 fs-5 text-white">{{ guitarra.descripcion }}</p>
                     <p class="text-primary fs-1 fw-black">{{ guitarra.precio }}</p>
-                    <button @click="$emit('agregar-carrito', guitarra)" type="button" class="btn fs-4 bg-primary text-white py-2 px-5">Agregar al Carrito</button>
+                    <button @click="$emit('agregar-carrito', guitarra)" type="button"
+                        class="btn fs-4 bg-primary text-white py-2 px-5">Agregar al Carrito</button>
                 </div>
             </div>
-        </div>
+    </div>
 
-        <img class="header-guitarra" src="/img/header_guitarra.png" alt="imagen header">
-    </header>
-</template>
+    <img class="header-guitarra" src="/img/header_guitarra.png" alt="imagen header">
+</header></template>

@@ -1,5 +1,5 @@
 <script setup>
-import { ref, reactive, onMounted } from 'vue'
+import { ref, onMounted, watch } from 'vue'
 import { db } from './data/guitarra'
 import Guitarra from './components/Guitarra.vue'
 import Header from './components/Header.vue'
@@ -9,10 +9,25 @@ const guitarras = ref([])
 const carrito = ref([])
 const guitarra = ref([])
 
+watch(carrito, () => {
+    guardarLocalStorage()
+}, {
+    deep: true
+})
+
 onMounted(() => {
     guitarras.value = db;
-    guitarra.value = db[3]
+    guitarra.value = db[3];
+
+    const carritoStorage = localStorage.getItem('carrito')
+    if (carritoStorage) {
+        carrito.value = JSON.parse(carritoStorage)
+    }
 })
+
+const guardarLocalStorage = () => {
+    localStorage.setItem('carrito', JSON.stringify(carrito.value))
+}
 
 const agregarCarrito = (guitarra) => {
     const existeCarrito = carrito.value.findIndex(producto => producto.id === guitarra.id)
@@ -41,8 +56,7 @@ const eliminarProducto = (id) => {
 }
 
 const vaciarCarrito = () => {
-   carrito.value = []
-
+    carrito.value = []
 }
 
 </script>
@@ -50,11 +64,12 @@ const vaciarCarrito = () => {
 <template>
     <div>
         <Header :carrito="carrito" :guitarra="guitarra" @incrementar-cantidad="incrementarCantidad"
-            @decrementar-cantidad="decrementarCantidad"  @agregar-carrito="agregarCarrito" @eliminar-producto="eliminarProducto" @vaciar-carrito="vaciarCarrito" />
+            @decrementar-cantidad="decrementarCantidad" @agregar-carrito="agregarCarrito"
+            @eliminar-producto="eliminarProducto" @vaciar-carrito="vaciarCarrito" />
         <main class="container-xl mt-5">
             <h2 class="text-center">Nuestra Colección</h2>
             <div class="row mt-5">
-                <Guitarra v-for="guitarra in guitarras" :guitarra="guitarra" :key="guitarra"
+                <Guitarra v-for="guitarra in guitarras" :guitarra="guitarra" :key="guitarra.id"
                     @agregar-carrito="agregarCarrito" />
             </div>
         </main>
